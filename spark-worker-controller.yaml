@@ -1,0 +1,36 @@
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: spark-worker-2-1-0
+spec:
+  replicas: 1
+  selector:
+    component: spark-worker-2-1-0
+  template:
+    metadata:
+      labels:
+        component: spark-worker-2-1-0
+    spec:
+      volumes:
+        - name: hostfolder-vol
+          hostPath:
+            path: /
+      containers:
+        - name: spark-worker-2-1-0
+          image: faruk/kubernetes-spark-2.1.0-h2.6
+          ports:
+            - containerPort: 7077
+            - containerPort: 8080
+          command:
+            - "/bin/bash"
+            - "-c"
+            - "--"
+          args :
+            - 'env && unset SPARK_MASTER_PORT && /opt/spark/sbin/start-slave.sh spark://spark-master-2-1-0:7077 && sleep infinity'
+          volumeMounts:
+            - mountPath: /hostfolder
+              name: hostfolder-vol
+          resources:
+            requests:
+              cpu: 100m
+ 

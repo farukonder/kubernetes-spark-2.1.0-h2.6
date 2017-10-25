@@ -1,0 +1,28 @@
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: zeppelin-controller-2-1-0
+spec:
+  replicas: 1
+  selector:
+    component: zeppelin-2-1-0
+  template:
+    metadata:
+      labels:
+        component: zeppelin-2-1-0
+    spec:
+      volumes:
+        - name: hostfolder-vol
+          hostPath:
+            path: /
+      containers:
+        - name: zeppelin
+          image: apache/zeppelin:0.7.3
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: /hostfolder
+              name: hostfolder-vol
+          resources:
+            requests:
+              cpu: 100m

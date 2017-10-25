@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: zeppelin-2-1-0
+spec:
+  ports:
+    - port: 8080 
+      targetPort: 8080
+      nodePort: 30210
+  selector:
+    component: zeppelin-2-1-0
+  type: NodePort

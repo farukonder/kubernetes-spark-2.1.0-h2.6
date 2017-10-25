@@ -1,0 +1,29 @@
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: hacdias-filemanager
+spec:
+  replicas: 1
+  selector:
+    component: hacdias-filemanager
+  template:
+    metadata:
+      labels:
+        component: hacdias-filemanager
+    spec:
+      volumes:
+        - name: hostfolder-vol
+          hostPath:
+            path: /
+      containers:
+        - name: hacdias-filemanager
+          image: hacdias/filemanager
+          ports:
+            - containerPort: 2000
+          args : 
+            [--port, "2000",--scope, "/"] 
+          volumeMounts:
+            - mountPath: /hostfolder
+              name: hostfolder-vol
+
+    

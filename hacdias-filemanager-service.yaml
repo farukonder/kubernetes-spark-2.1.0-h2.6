@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: hacdias-filemanager
+spec:
+  ports:
+    - port: 2000
+      targetPort: 2000
+      nodePort: 30002
+      name: http
+  type: NodePort
+  selector:
+    component: hacdias-filemanager

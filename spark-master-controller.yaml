@@ -1,0 +1,35 @@
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: spark-master-controller-2-1-0
+spec:
+  replicas: 1
+  selector:
+    component: spark-master-2-1-0
+  template:
+    metadata:
+      labels:
+        component: spark-master-2-1-0
+    spec:
+      volumes:
+        - name: hostfolder-vol
+          hostPath:
+            path: /
+      containers:
+        - name: spark-master-2-1-0
+          image: faruk/kubernetes-spark-2.1.0-h2.6
+          ports:
+            - containerPort: 7077
+            - containerPort: 8080
+          command:
+            - "/bin/bash"
+            - "-c"
+            - "--"
+          args :
+            - 'unset SPARK_MASTER_PORT && echo $(hostname -i) "spark-master-2-1-0" >> /etc/hosts && /opt/spark/sbin/start-master.sh --ip spark-master-2-1-0 --port 7077 && sleep infinity'
+          volumeMounts:
+            - mountPath: /hostfolder
+              name: hostfolder-vol
+          resources:
+            requests:
+              cpu: 100m
